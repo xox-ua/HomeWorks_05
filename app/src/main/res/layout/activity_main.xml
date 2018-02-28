@@ -1,18 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.xox_ua.homeworks_05.MainActivity">
+    tools:context="com.example.xox_ua.homeworks_05.MainActivity"
+    android:orientation="vertical">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        <ListView
+            android:id="@+id/lv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
 
-</android.support.constraint.ConstraintLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_weight="0">
+            <Button
+                android:id="@+id/btnAdd"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/btnAdd"
+                android:layout_weight="1"
+                android:layout_gravity="center"
+                android:background="@color/colorGreen"
+                android:layout_margin="5dp"
+                tools:ignore="ButtonStyle,NestedWeights" />
+            <Button
+                android:id="@+id/btnRemove"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/btnRemove"
+                android:layout_weight="1"
+                android:layout_gravity="center"
+                android:background="@color/colorRed"
+                android:layout_margin="5dp"
+                tools:ignore="ButtonStyle,NestedWeights" />
+
+        </LinearLayout>
+
+
+</LinearLayout>

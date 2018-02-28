@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">HomeWorks_05</string>
+
+    <string name="btnAdd">Добавить</string>
+    <string name="btnRemove">Убрать</string>
+    <string name="text">TEXT</string>
 </resources>
