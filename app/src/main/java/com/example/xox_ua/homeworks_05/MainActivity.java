@@ -3,30 +3,21 @@ package com.example.xox_ua.homeworks_05;
 import android.content.pm.ActivityInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
+import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.Toast;
-
-import java.util.ArrayList;
-import java.util.List;
+import android.widget.SimpleAdapter;
 
 public class MainActivity extends AppCompatActivity {
-    String[] countryNames = {
-            "0. Andorra",
-            "1. Austria",
-            "2. Belgium",
-            "3. Cyprus",
-            "4. Denmark",
-            "5. Estonia",
-            "6. Finland",
-            "7. France",
-            "8. Germany",
-            "9. Spain" };
-
+    String[] countryNames = { "Andorra", "Austria", "Belgium", "Cyprus", "Denmark", "Estonia", "Finland", "France", "Germany", "Spain" };
     int[] countryFlags = {
             R.drawable.zz_flg_and,
             R.drawable.zz_flg_aut,
@@ -38,38 +29,60 @@ public class MainActivity extends AppCompatActivity {
             R.drawable.zz_flg_fra,
             R.drawable.zz_flg_deu,
             R.drawable.zz_flg_esp };
-    ListView lv;
-    Button btnAddItem;
-    Button btnRemoveItem;
-    CustomListAdapter adapter;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    // имена атрибутов для Map
+    final String COUNTRY_NAME = "name";
+    final String COUNTRY_FLAG = "flag";
+    ListView listView;
+    SimpleAdapter sAdapter;
+    ArrayList<Map<String, Object>> data;
+    Map<String, Object> m;
+    Button btnAdd;
+    Button btnDel;
+
+
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        // фиксируем экран (запрет поворота)
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-        lv = (ListView) findViewById(R.id.lv);
-        btnAddItem = (Button) findViewById(R.id.btnAdd);
-        btnRemoveItem = (Button) findViewById(R.id.btnRemove);
+        btnAdd = (Button) findViewById(R.id.btnAdd);
+        btnDel = (Button) findViewById(R.id.btnDel);
 
-        adapter=new CustomListAdapter(this, countryNames, countryFlags);
-        lv=(ListView)findViewById(R.id.lv);
-        lv.setAdapter(adapter);
-        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String mess = "Выбрана позиция: " + position;
-                Toast.makeText(getApplicationContext(), mess, Toast.LENGTH_LONG).show();
-            }
-        });
+        // упаковываем данные в понятную для адаптера структуру
+        data = new ArrayList<Map<String, Object>>(countryNames.length);
+        for (int i = 1; i < countryNames.length; i++) {
+            m = new HashMap<String, Object>();
+            m.put(COUNTRY_NAME, countryNames[i]);
+            m.put(COUNTRY_FLAG, countryFlags[i]);
+            data.add(m);
+        }
 
-        btnAddItem.setOnClickListener(new View.OnClickListener() {
+        // массив имен атрибутов, из которых будут читаться данные
+        String[] from = { COUNTRY_NAME, COUNTRY_FLAG };
+        // массив ID View-компонентов, в которые будут вставлять данные
+        int[] to = { R.id.textView, R.id.imageView };
+
+        // создаем адаптер
+        sAdapter = new SimpleAdapter(this, data, R.layout.item_list, from, to);
+
+        // определяем список и присваиваем ему адаптер
+        listView = (ListView) findViewById(R.id.listView);
+        listView.setAdapter(sAdapter);
+        registerForContextMenu(listView);
+
+        btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                    adapter.add("New country", R.drawable.zz_flg_eu);
-                    adapter.notifyDataSetChanged();
-
+                // создаем новый Map
+                m = new HashMap<String, Object>();
+                m.put(COUNTRY_NAME, "Some EU country");
+                m.put(COUNTRY_FLAG, R.drawable.zz_flg_eu);
+                // добавляем его в коллекцию
+                data.add(m);
+                // уведомляем, что данные изменились
+                sAdapter.notifyDataSetChanged();
             }
         });
 
