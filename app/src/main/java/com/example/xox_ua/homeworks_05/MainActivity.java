@@ -6,15 +6,13 @@ import android.os.Bundle;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import android.view.ContextMenu;
-import android.view.ContextMenu.ContextMenuInfo;
-import android.view.MenuItem;
+import java.util.Random;
 import android.view.View;
-import android.widget.AdapterView.AdapterContextMenuInfo;
-import android.widget.ArrayAdapter;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
     String[] countryNames = { "Andorra", "Austria", "Belgium", "Cyprus", "Denmark", "Estonia", "Finland", "France", "Germany", "Spain" };
@@ -70,8 +68,17 @@ public class MainActivity extends AppCompatActivity {
         // определяем список и присваиваем ему адаптер
         listView = (ListView) findViewById(R.id.listView);
         listView.setAdapter(sAdapter);
-        registerForContextMenu(listView);
 
+        // обрабатываем нажатие на строку
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String mess = "Выбран: " + "\nЕго позиция: " + position;
+                Toast.makeText(getApplicationContext(), mess, Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        // добавляем новую строку в list
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -86,6 +93,23 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
+        // удаляем строку из list
+        btnDel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // получаем случайное число в диапазоне строк в списке
+                int count = listView.getCount();
+                if (count == 0) {
+                    Toast.makeText(getApplicationContext(),"No item for deleting", Toast.LENGTH_LONG).show();
+                } else {
+                    Random random = new Random();
+                    int pos = random.nextInt(count);
+                    // удаляем позицию равную числу выше
+                    data.remove(pos);
+                    // уведомляем, что данные изменились
+                    sAdapter.notifyDataSetChanged();
+                }
+            }
+        });
     }
 }
