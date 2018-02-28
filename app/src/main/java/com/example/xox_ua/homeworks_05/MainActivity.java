@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String mess = "Выбран: " + "\nЕго позиция: " + position;
+                String mess = "Выбрана позиция: " + position;
                 Toast.makeText(getApplicationContext(), mess, Toast.LENGTH_SHORT).show();
             }
         });
@@ -82,10 +82,15 @@ public class MainActivity extends AppCompatActivity {
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // случайное название страны из нашего массива
+                int idX = new Random().nextInt(countryNames.length);
+                String randomName = (countryNames[idX]);
+                // флаг соответствующий выбранной стране
+                int flg = countryFlags[idX];
                 // создаем новый Map
                 m = new HashMap<String, Object>();
-                m.put(COUNTRY_NAME, "Some EU country");
-                m.put(COUNTRY_FLAG, R.drawable.zz_flg_eu);
+                m.put(COUNTRY_NAME, randomName + " - NEW!");
+                m.put(COUNTRY_FLAG, flg);
                 // добавляем его в коллекцию
                 data.add(m);
                 // уведомляем, что данные изменились
